@@ -1,0 +1,48 @@
+.right-content {
+    width: 4%;
+    height: auto;
+    margin-left: 95%;
+    margin-top: 20%;
+    background-color: blanchedalmond;
+    border-radius: 13px;
+    padding: 3px;
+    position: fixed;
+}
+
+.right-content a {
+    font-size: small;
+    margin-bottom: 5px;
+    white-space: nowrap;
+}
+
+.read-more {
+    margin-left: 75%;
+}
+
+.contact-module {
+    display: inline;
+    width: 100%;
+    height: auto;
+}
+
+.contact-module div {
+    display: inline-block;
+    width: 30%;
+    height: auto;
+    border-radius: 16px;
+    pad: 0.5px;
+    margin-left: 2.5%;
+    background-color: rgb(142, 177, 241);
+}
+
+.contact-module div h3 {
+    text-align: center;
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+.contact-module div p {
+    text-align: center;
+    font-size: large;
+    margin-bottom: 5px;
+}
