@@ -15,7 +15,20 @@ document.onkeydown = function () {
 document.oncontextmenu = function () {
     return false;
 }
+
 function NewWin(url) {
     window.open(url);
     console.log("Open New Window by JS Moment -> " + url);
+}
+
+
+function CopyContent(content) {
+    var aux = document.createElement("input");
+    aux.setAttribute("value", content);
+    document.body.appendChild(aux);
+    aux.select();
+    document.execCommand("copy");
+    document.body.removeChild(aux);
+    alert("复制成功");
+    console.log("Visitor Copy QQ Account Number -> " + content);
 }
