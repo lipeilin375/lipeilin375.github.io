@@ -1,0 +1,12 @@
+#container {
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 15px;
+    border-radius: 16px;
+}
+
+#container div {
+    width: 70%;
+    height: ;
+}
