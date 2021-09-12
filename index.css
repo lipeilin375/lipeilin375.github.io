@@ -41,8 +41,10 @@
     margin-bottom: 10px;
 }
 
-.contact-module div p {
+.contact-module div a {
+    display: block;
     text-align: center;
+    justify-content: center;
     font-size: large;
     margin-bottom: 5px;
 }
