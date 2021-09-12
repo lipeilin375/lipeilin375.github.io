@@ -15,3 +15,7 @@ document.onkeydown = function () {
 document.oncontextmenu = function () {
     return false;
 }
+function NewWin(url) {
+    window.open(url);
+    console.log("Open New Window by JS Moment -> " + url);
+}
