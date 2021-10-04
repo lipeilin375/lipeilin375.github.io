@@ -3,34 +3,44 @@ ul {
     padding: 0;
     margin: 0;
 }
+
 div {
     word-wrap: break-word;
 }
-a{
+
+a {
     text-decoration: none;
 }
+
 a:link {
     color: coral;
 }
+
 a:visited {
     color: coral;
 }
+
 a:hover {
     color: cornflowerblue;
 }
+
 a:active {
     color: darkorange;
 }
+
 p {
     word-wrap: break-word;
     margin: 0;
 }
+
 h2 {
     margin: 0;
 }
+
 h3 {
     margin: 0;
 }
+
 h5 {
     margin: 0;
 }
@@ -121,6 +131,8 @@ h5 {
     padding: 10px;
     background-repeat: no-repeat;
     background-position: left center;
+    background-size: 30px;
+    padding-left: 40px;
 }
 
 .item-intro-all {
