@@ -1,7 +1,7 @@
 body::before {
     display: block;
     content: '';
-    height: 56px;
+    height: 45px;
 }
 
 @media (min-width: 992px) {
@@ -12,36 +12,4 @@ body::before {
 
 .circle-angle {
     border-radius: 8px;
-}
-
-.carousel-indicators {
-    position: absolute; /*整个计数区域绝对定位*/
-    bottom: 10px; /*距容器carousel底部10px*/
-    z-index: 15; /*设置其在Z轴的层级*/
-    /*让整个计数区水平居中*/
-    left: 50%;
-    width: 60%;
-    padding-left: 0;
-    margin-left: -30%;
-    text-align: center;
-    list-style: none;
-}
-.carousel-indicators li {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin: 1px;
-    text-indent: -999px;
-    cursor: pointer;
-    background-color: #000 \9;
-    background-color: rgba(0, 0, 0, 0);
-    border: 1px solid #fff;
-    border-radius: 10px;
-}
-/*设置当前状态样式*/
-.carousel-indicators .active {
-    width: 12px;
-    height: 12px;
-    margin: 0;
-    background-color: #fff;
 }
