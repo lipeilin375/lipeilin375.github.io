@@ -1,13 +1,7 @@
 body::before {
     display: block;
     content: '';
-    height: 45px;
-}
-
-@media (min-width: 992px) {
-    .news-input {
-        width: 50%;
-    }
+    height: 50px;
 }
 
 .circle-angle {
