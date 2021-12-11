@@ -11,3 +11,8 @@ a {
 .circle-angle {
     border-radius: 8px;
 }
+
+.auto-margin {
+    margin-left: auto;
+    margin-right: auto;
+}
