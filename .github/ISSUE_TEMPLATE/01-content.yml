@@ -1,0 +1,12 @@
+name: 内容推荐
+description: 如果你有任何我们尚未列举出的内容想要学习，欢迎在此告诉我们。
+labels: ["内容"]
+body:
+  - type: markdown
+    id: detail
+    attibutes:
+      label: 内容描述
+      description: >
+        告诉我们更多有关你想学习的内容
+      validations:
+        required: true

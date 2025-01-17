@@ -1,0 +1,22 @@
+name: 版权申诉
+description: 如果你发现你的作品被我们直接引用而未声明来源，请在此告诉我们。
+labels: ["版权"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 内容描述
+      description: >
+        请告诉我们你的内容是什么以及我们在什么地方引用过。
+      validations:
+       required: true
+  - type: markdown
+    id: prof
+    attributes:
+      label: 佐证材料
+      description: >
+        请让我们相信这份作品由你制作。
+      validations:
+       required: true
+      
+    
