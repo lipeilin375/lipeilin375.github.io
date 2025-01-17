@@ -1,0 +1,42 @@
+# Documentation
+# * mdbook   https://rust-lang.github.io/mdBook/
+
+[book]
+authors             = ["Billy Lin"]
+language            = "zh"
+multilingual        = false
+src                 = "books"
+title               = "Billyの个人博客"
+
+[output.html]
+smart-punctuation = true
+mathjax-support = true
+no-section-label = false
+git-repository-url = "https://github.com/lipeilin375/lipeilin375.github.io"
+edit-url-template = "https://github.com/lipeilin375/lipeilin375.github.io/edit/main/{path}"
+
+[output.html.print]
+enable = true
+page-break = true
+
+[output.html.playground]
+editable = true
+copyable = true
+copy-js = true
+line-numbers = true
+runnable = true
+
+[output.html.code.hidelines]
+python = "~"
+
+[output.html.search]
+limit-results = 20
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 2
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

@@ -1,0 +1,22 @@
+name: Seize my copyright back
+description: If you have seen something is from you but I didn't mention the origin from you, please let me know.
+labels: ["Copyright"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: >
+        Tell us what content is from you and where we used it.
+      validations:
+       required: true
+  - type: markdown
+    id: prof
+    attributes:
+      label: Provement
+      description: >
+        Please let us know how could you prove it belongs to you.
+      validations:
+       required: true
+      
+    
