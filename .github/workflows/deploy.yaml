@@ -2,7 +2,7 @@
 #
 # To get started with mdBook see: https://rust-lang.github.io/mdBook/index.html
 #
-name: Deploy Aleci Matey's Blog
+name: Deploy Billy's Blog
 
 on:
   # Runs on pushes targeting the default branch
