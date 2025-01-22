@@ -33,4 +33,12 @@ jobs:
     - name: Force Push to GitLab
       run: |
         git remote get-url gitlab || git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
-        git push --force gitlab main
+        git push --force gitlab main || echo "Force push failed. Proceeding to create a merge request."
+
+    - name: Create Merge Request on GitLab (if force push fails)
+      if: failure()
+      run: |
+        # 创建合并请求
+        curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_ACCESS_TOKEN }}" \
+             --data "source_branch=main&target_branch=main&title=Sync changes from GitHub to GitLab" \
+             "https://gitlab.com/api/v4/projects/$(urlencode lipeilin3751%2Flipeilin3751.gitlab.io)/merge_requests"
