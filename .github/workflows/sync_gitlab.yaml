@@ -14,7 +14,7 @@ jobs:
               uses: wearerequired/git-mirror-action@master
               env:
                   # 注意在 Settings->Secrets 配置 GITEE_RSA_PRIVATE_KEY
-                  SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SSH_KEY }}
+                  SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}
               with:
                   source-repo: git@github.com:lipeilin375/lipeilin375.github.io.git
                   destination-repo: git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
