@@ -3,36 +3,24 @@ name: Sync to GitLab
 on:
   push:
     branches:
-      - main  # 或者你想同步的其他分支
+      - main  # 根据你的需求设置为合适的分支，如 'main' 或 'master'
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: 检出 GitHub 仓库的代码
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Step 2: 配置 Git 用户名和邮箱
-      - name: Set up Git configuration
-        run: |
-          git config --global user.name "Blog Auto Sync"
-          git config --global user.email "no-reply@autosync.to.gitlab.com"
+    - name: Set up SSH key for GitLab
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
-      # Step 3: 设置 SSH 私钥并将其添加到 SSH Agent
-      - name: Set up SSH keys
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts
-
-      # Step 4: 添加 GitLab 远程仓库
-      - name: Set up GitLab repository
-        run: |
-          git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
-
-      # Step 5: Push the code to GitLab
-      - name: Push to GitLab
-        run: |
-          git push --mirror gitlab
+    - name: Push to GitLab
+      run: |
+        git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
+        git push --all gitlab
