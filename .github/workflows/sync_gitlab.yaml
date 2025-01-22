@@ -22,8 +22,9 @@ jobs:
 
     - name: Pull latest changes from GitLab
       run: |
-        git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
+        git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git  # 替换为你的 GitLab 仓库地址
         git fetch gitlab
+        git config pull.rebase true
         git pull gitlab main
 
     - name: Push to GitLab
