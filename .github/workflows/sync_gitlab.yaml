@@ -31,13 +31,23 @@ jobs:
       run: |
         git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
 
-    - name: Purge remote-tracking refs
+    - name: Clean Remote Tracking Refs
       run: |
-        # 删除所有远程跟踪分支（origin/*）
+        # 删除所有远程跟踪分支
         git for-each-ref --format='delete %(refname)' refs/remotes | git update-ref --stdin
+        
+        # 特别处理 HEAD 符号引用
+        git symbolic-ref -d refs/remotes/origin/HEAD 2>/dev/null || true
 
     - name: Push to GitLab
       run: |
-        # 仅推送本地分支和标签
-        git push gitlab --force refs/heads/*:refs/heads/*
+        # 创建临时分支列表文件
+        git show-ref --heads | awk '{print $2}' > branch-list.txt
+        
+        # 逐个分支推送（避免引用冲突）
+        while read branch; do
+          git push gitlab "${branch}:${branch}" --force
+        done < branch-list.txt
+        
+        # 推送所有标签
         git push gitlab --tags --force
