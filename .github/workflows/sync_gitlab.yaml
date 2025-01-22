@@ -22,18 +22,22 @@ jobs:
 
     - name: Setup SSH
       run: |
-        # 安装SSH密钥
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        
-        # 将GitLab加入已知主机
         ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
     - name: Add GitLab Remote
       run: |
         git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
 
+    - name: Purge remote-tracking refs
+      run: |
+        # 删除所有远程跟踪分支（origin/*）
+        git for-each-ref --format='delete %(refname)' refs/remotes | git update-ref --stdin
+
     - name: Push to GitLab
       run: |
-        git push --force --mirror gitlab
+        # 仅推送本地分支和标签
+        git push gitlab --force refs/heads/*:refs/heads/*
+        git push gitlab --tags --force
