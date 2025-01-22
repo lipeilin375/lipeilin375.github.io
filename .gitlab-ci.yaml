@@ -1,21 +1,29 @@
 stages:
-    - deploy
+  - build
+  - deploy
 
-pages:
-  stage: deploy
-  image: rust
-  variables:
-    CARGO_HOME: $CI_PROJECT_DIR/cargo
-  before_script:
-    - export PATH="$PATH:$CARGO_HOME/bin"
-    - mdbook --version || cargo install mdbook
+# 构建 mdBook 文档
+build_mdbook:
+  stage: build
+  image: rust:latest
   script:
-    - mdbook build -d public
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "main"'
+    - apt-get update && apt-get install -y curl
+    - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    - source $HOME/.cargo/env
+    - cargo install mdbook
+    - mdbook build  # 执行 mdBook 构建
   artifacts:
     paths:
-      - public
-  cache:
+      - books/  # 保存构建结果目录，gitlab pages 会使用这个目录来部署
+
+# 部署到 GitLab Pages
+pages:
+  stage: deploy
+  script:
+    - mkdir .public
+    - cp -r books/* .public/  # 将构建后的文件拷贝到 .public 目录
+  artifacts:
     paths:
-      - $CARGO_HOME/bin
+      - .public
+  only:
+    - main  # 只在 `main` 分支上部署，或者你也可以改成你自己的部署分支
