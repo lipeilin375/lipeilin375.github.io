@@ -35,4 +35,4 @@ jobs:
       # Step 5: Push the code to GitLab
       - name: Push to GitLab
         run: |
-          git push --mirror gitlab
+          git push gitlab main
