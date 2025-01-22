@@ -20,6 +20,12 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
+    - name: Pull latest changes from GitLab
+      run: |
+        git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
+        git fetch gitlab
+        git pull gitlab main
+
     - name: Push to GitLab
       run: |
         git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
