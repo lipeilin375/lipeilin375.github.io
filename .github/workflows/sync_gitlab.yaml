@@ -3,7 +3,7 @@ name: Sync to GitLab
 on:
   push:
     branches:
-      - main
+      - main  # 根据你的需求设置为合适的分支，如 'main' 或 'master'
 
 jobs:
   sync:
@@ -22,12 +22,15 @@ jobs:
 
     - name: Fetch latest commits from GitLab
       run: |
-        # 检查是否已经添加了远程仓库，如果没有则添加
         git remote get-url gitlab || git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
         git fetch gitlab
 
-    - name: Push to GitLab
+    - name: Pull changes from GitLab
       run: |
-        # 检查是否已经添加了远程仓库，如果没有则添加
+        # 拉取远程 GitLab 分支的更新，并保持本地更改
+        git pull gitlab main --rebase
+
+    - name: Force Push to GitLab
+      run: |
         git remote get-url gitlab || git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
-        git push --all gitlab
+        git push --force gitlab main
