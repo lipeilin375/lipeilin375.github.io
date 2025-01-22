@@ -3,42 +3,37 @@ name: Sync to GitLab
 on:
   push:
     branches:
-      - main  # 根据你的需求设置为合适的分支，如 'main' 或 'master'
+      - main
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout GitHub code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # 获取完整提交历史
 
-    - name: Set up SSH key for GitLab
+    - name: Configure Git
       run: |
+        git config --global user.name "Auto Sync"
+        git config --global user.email "no-reply@auto.sync.com"
+
+    - name: Setup SSH
+      run: |
+        # 安装SSH密钥
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
+        
+        # 将GitLab加入已知主机
         ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
 
-    - name: Fetch latest commits from GitLab
+    - name: Add GitLab Remote
       run: |
-        git remote get-url gitlab || git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
-        git fetch gitlab
+        git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
 
-    - name: Pull changes from GitLab
+    - name: Push to GitLab
       run: |
-        # 拉取远程 GitLab 分支的更新，并保持本地更改
-        git pull gitlab main --rebase
-
-    - name: Force Push to GitLab
-      run: |
-        git remote get-url gitlab || git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
-        git push --force gitlab main || echo "Force push failed. Proceeding to create a merge request."
-
-    - name: Create Merge Request on GitLab (if force push fails)
-      if: failure()
-      run: |
-        # 创建合并请求
-        curl --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_ACCESS_TOKEN }}" \
-             --data "source_branch=main&target_branch=main&title=Sync changes from GitHub to GitLab" \
-             "https://gitlab.com/api/v4/projects/$(urlencode lipeilin3751%2Flipeilin3751.gitlab.io)/merge_requests"
+        git push --force --mirror gitlab
