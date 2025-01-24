@@ -1,0 +1,26 @@
+name: Sync to GitLab
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (Full History)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 关键修复点
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git remote add jihulab https://oauth2:${{ secrets.JIHU_TOKEN }}@jihulab.com/BillyLin/billylin.gitlab.io.git
+
+      - name: Unshallow (保险措施)
+        run: git fetch --unshallow || true
+
+      - name: Push to GitLab
+        run: git push jihulab HEAD:main --force
