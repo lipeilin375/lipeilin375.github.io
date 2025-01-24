@@ -1,4 +1,4 @@
-name: Sync to GitLab
+name: Sync to JihuLab
 
 on:
   push:
