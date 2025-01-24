@@ -3,19 +3,28 @@ stages:
 
 pages:
   stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache curl tar
-    # 下载并安装 mdBook
-    - |
-      MDBOOK_VERSION="0.4.43"
-      curl -L -o mdbook.tar.gz "https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-musl.tar.gz"
-      tar xzf mdbook.tar.gz
-      mv mdbook /usr/local/bin/
+  image: rust:latest   # 使用官方 Rust 镜像（已包含 cargo）
+  variables:
+    MD_VERSION: "0.4.43"  # 指定 mdbook 版本
   script:
-    - mdbook build books --dest-dir public
+    # 安装 mdbook
+    - cargo install mdbook --vers $MD_VERSION
+
+    # 构建书籍（指定源目录）
+    - mdbook build ./ --dest-dir public
+
+    # 修复路径（如果需自定义输出目录）
+    - mv public/book/* public/  # 可选步骤，根据实际生成路径调整
+
+    # 验证生成结果
+    - ls -l public/
   artifacts:
     paths:
       - public
-  only:
-    - main
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"  # 仅 main 分支触发
+  cache:
+    key: mdbook-cache
+    paths:
+      - /root/.cargo/registry
+      - /root/.cargo/git

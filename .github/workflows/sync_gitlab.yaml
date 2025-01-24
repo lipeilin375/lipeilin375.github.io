@@ -2,52 +2,25 @@ name: Sync to GitLab
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]  # 根据需要修改分支
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout GitHub code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # 获取完整提交历史
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Configure Git
-      run: |
-        git config --global user.name "Auto Sync"
-        git config --global user.email "no-reply@auto.sync.com"
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-    - name: Setup SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+      - name: Add GitLab remote
+        run: |
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/lipeilin3751/lipeilin3751.gitlab.io.git
+          # 示例：git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/john/project.git
 
-    - name: Add GitLab Remote
-      run: |
-        git remote add gitlab git@gitlab.com:lipeilin3751/lipeilin3751.gitlab.io.git
-
-    - name: Clean Remote Tracking Refs
-      run: |
-        # 删除所有远程跟踪分支
-        git for-each-ref --format='delete %(refname)' refs/remotes | git update-ref --stdin
-        
-        # 特别处理 HEAD 符号引用
-        git symbolic-ref -d refs/remotes/origin/HEAD 2>/dev/null || true
-
-    - name: Push to GitLab
-      run: |
-        # 创建临时分支列表文件
-        git show-ref --heads | awk '{print $2}' > branch-list.txt
-        
-        # 逐个分支推送（避免引用冲突）
-        while read branch; do
-          git push gitlab "${branch}:${branch}" --force
-        done < branch-list.txt
-        
-        # 推送所有标签
-        git push gitlab --tags --force
+      - name: Push to GitLab
+        run: git push gitlab HEAD:main --force
+        # 如果要同步所有分支和标签，使用：git push --mirror gitlab
