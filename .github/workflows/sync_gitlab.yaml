@@ -2,25 +2,25 @@ name: Sync to GitLab
 
 on:
   push:
-    branches: [ main ]  # 根据需要修改分支
+    branches: [ main ]
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout (Full History)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # 关键修复点
 
       - name: Configure Git
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git remote add https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/lipeilin3751/lipeilin3751.gitlab.io.git
 
-      - name: Add GitLab remote
-        run: |
-          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/lipeilin3751/lipeilin3751.gitlab.io.git
-          # 示例：git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/john/project.git
+      - name: Unshallow (保险措施)
+        run: git fetch --unshallow || true
 
       - name: Push to GitLab
         run: git push gitlab HEAD:main --force
-        # 如果要同步所有分支和标签，使用：git push --mirror gitlab
