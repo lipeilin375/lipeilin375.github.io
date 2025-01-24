@@ -1,39 +1,50 @@
 stages:
+  - build
   - deploy
+
+variables:
+  MDBOOK_VERSION: "0.4.43"
+  PUBLIC_DIR: "public"
+
+# 并发控制（GitLab 15.11+）
+workflow:
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+    - when: manual
+
+build:
+  stage: build
+  image: rust:latest
+  resource_group: pages # 并发控制
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  
+  before_script:
+    - rustup update
+    - cargo install --version $MDBOOK_VERSION mdbook
+
+  script:
+    - mdbook build
+    - mkdir -p $PUBLIC_DIR
+    - cp -r book/* $PUBLIC_DIR/
+
+  artifacts:
+    paths:
+      - $PUBLIC_DIR
+    expire_in: 1 hour
 
 pages:
   stage: deploy
-  image: rust:latest
-  variables:
-    MD_VERSION: "0.4.43"
+  dependencies:
+    - build
+  resource_group: pages # 并发控制
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+  
   script:
-    # 调试：显示目录结构
-    - pwd && ls -la
+    - echo "Deploying to GitLab Pages..."
+    - mv $PUBLIC_DIR ./public
 
-    # 安装mdbook（带版本锁定）
-    - cargo install mdbook --vers $MD_VERSION --locked
-
-    # 构建书籍（自动创建public目录）
-    - mkdir -p public
-    - mdbook build ./ --dest-dir public
-
-    # 调试：验证输出结构
-    - echo "生成的文件结构：" && ls -lR public/
-
-    # 路径修正（仅在存在book子目录时执行）
-    - |
-      if [ -d "public/book" ]; then
-        mv public/book/* public/
-        rmdir public/book
-      fi
   artifacts:
     paths:
       - public
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  cache:
-    key: mdbook-$CI_COMMIT_REF_SLUG
-    paths:
-      - /root/.cargo/registry
-      - /root/.cargo/git
-    policy: pull-push
