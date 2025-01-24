@@ -8,6 +8,7 @@ src                 = "books"
 title               = "Billyの个人博客"
 
 [output.html]
+destination = "public"
 smart-punctuation = true
 mathjax-support = true
 git-repository-url = "https://github.com/lipeilin375"

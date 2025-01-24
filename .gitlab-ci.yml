@@ -3,28 +3,37 @@ stages:
 
 pages:
   stage: deploy
-  image: rust:latest   # 使用官方 Rust 镜像（已包含 cargo）
+  image: rust:latest
   variables:
-    MD_VERSION: "0.4.43"  # 指定 mdbook 版本
+    MD_VERSION: "0.4.43"
   script:
-    # 安装 mdbook
-    - cargo install mdbook --vers $MD_VERSION
+    # 调试：显示目录结构
+    - pwd && ls -la
 
-    # 构建书籍（指定源目录）
+    # 安装mdbook（带版本锁定）
+    - cargo install mdbook --vers $MD_VERSION --locked
+
+    # 构建书籍（自动创建public目录）
+    - mkdir -p public
     - mdbook build ./ --dest-dir public
 
-    # 修复路径（如果需自定义输出目录）
-    - mv public/book/* public/  # 可选步骤，根据实际生成路径调整
+    # 调试：验证输出结构
+    - echo "生成的文件结构：" && ls -lR public/
 
-    # 验证生成结果
-    - ls -l public/
+    # 路径修正（仅在存在book子目录时执行）
+    - |
+      if [ -d "public/book" ]; then
+        mv public/book/* public/
+        rmdir public/book
+      fi
   artifacts:
     paths:
       - public
   rules:
-    - if: $CI_COMMIT_BRANCH == "main"  # 仅 main 分支触发
+    - if: $CI_COMMIT_BRANCH == "main"
   cache:
-    key: mdbook-cache
+    key: mdbook-$CI_COMMIT_REF_SLUG
     paths:
       - /root/.cargo/registry
       - /root/.cargo/git
+    policy: pull-push
