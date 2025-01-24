@@ -7,6 +7,9 @@ language            = "zh"
 src                 = "books"
 title               = "Billyの个人博客"
 
+[build]
+build-dir = "public"
+
 [output.html]
 smart-punctuation = true
 mathjax-support = true
@@ -35,3 +38,7 @@ boost-hierarchy = 2
 boost-paragraph = 1
 expand = true
 heading-split-level = 2
+
+[preprocessor.toc]
+command = "./mdbook-toc"
+renderer = ["html"]

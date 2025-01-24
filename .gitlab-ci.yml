@@ -1,19 +1,13 @@
-# The Docker image that will be used to build your app
-image: rust:latest
-# Functions that should be executed before the build script is run
-before_script:
-  - rustup update
-  - cargo install --version 0.4.43 mdbook
 pages:
+  stage: deploy
   script:
-    - mdbook build
+  - wget https://github.com/badboy/mdbook-toc/releases/download/0.14.2/mdbook-toc-0.14.2-x86_64-unknown-linux-gnu.tar.gz
+  - wget https://github.com/rust-lang/mdBook/releases/download/v0.4.43/mdbook-v0.4.43-x86_64-unknown-linux-gnu.tar.gz
+  - tar xvzf mdbook-v0.4.43-x86_64-unknown-linux-gnu.tar.gz
+  - tar xvzf mdbook-toc-0.14.2-x86_64-unknown-linux-gnu.tar.gz
+  - ./mdbook build
   artifacts:
     paths:
-      # The folder that contains the files to be exposed at the Page URL
-      - book
-  variables:
-    PUBLIC_DIR: "book"
-  rules:
-    # This ensures that only pushes to the default branch will trigger
-    # a pages deploy
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - public
+  only:
+  - master
