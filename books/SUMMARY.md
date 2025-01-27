@@ -1,6 +1,7 @@
 # Summary
 
-[简介](introduction.md)
+[项目简介](introduction.md)
+[个人简介](personal-introduction.md)
 
 -----------
 
