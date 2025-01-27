@@ -2,10 +2,10 @@
 # * mdbook   https://rust-lang.github.io/mdBook/
 
 [book]
-authors             = ["Billy"]
+authors             = ["BillyLin"]
 language            = "zh"
 src                 = "books"
-title               = "Billyの个人博客"
+title               = "Billy de 个人博客"
 
 [build]
 build-dir = "public"
